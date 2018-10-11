@@ -14,7 +14,6 @@ int main(int argc, char* argv[]) {
 	char choice[5];
 	currentState current;
 	currentState response;
-	State state;
 	int personid = 0;
 	//int weight = 0;
 
@@ -27,7 +26,7 @@ int main(int argc, char* argv[]) {
 	    	perror (NULL);
 	    	exit (EXIT_FAILURE);
 	   	}
-	while(current.state != EXIT){
+	while(response.state != EXIT){
 		scanf("%s",&choice);
 		if(strcmp(choice,"ls") == 0){
 			current.choice = 0;
