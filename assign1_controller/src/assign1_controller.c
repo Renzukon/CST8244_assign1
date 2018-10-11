@@ -6,7 +6,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#include <proj.h>
+#include "proj.h"
 
 int main(void) {
 	printf("The controller is running as process_id %d\n", getpid());
