@@ -7,7 +7,7 @@
 #include <ctype.h>
 #include <errno.h>
 
-#include "proj.h"
+#include <proj.h>
 
 //function prototypes
 

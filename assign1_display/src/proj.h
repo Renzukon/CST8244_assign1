@@ -35,5 +35,5 @@ struct currentState {
 	char outMessage[128];
 	int personId;
 	int weight;
-}typedef currentState;
+}currentState;
 #endif /* PROJ_H_ */
