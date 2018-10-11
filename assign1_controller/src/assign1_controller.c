@@ -24,24 +24,16 @@ void guard_RL(void);
 void weight(void);
 void exit_program(void);
 
-currentState current;
+response res;
 
 int main(int argc, char* argv[]) {
 
-	pid_t serverpid = atoi(argv[1]);
-	int  coid;
-	coid = ConnectAttach (ND_LOCAL_NODE, serverpid, 1, _NTO_SIDE_CHANNEL, 0);
-	if (coid == -1) {
-		fprintf (stderr, "Couldn't ConnectAttach\n");
-		perror (NULL);
-		exit(EXIT_FAILURE);
-	}
+	//pid_t serverpid = atoi(argv[1]);
+	int  rcvid;
+	int  chid;
+	currentState current;
 
-	int     rcvid;
-	int     chid;
-
-
-	printf("The controller is running as process_id %d\n", getpid());
+	//int  coid;
 
     chid = ChannelCreate (0);
     if (chid == -1)
@@ -49,18 +41,32 @@ int main(int argc, char* argv[]) {
     	perror("failed to create the channel.");
     	exit (EXIT_FAILURE);
     }
+	printf("The controller is running as process_id %d\n", getpid());
+	/*coid = ConnectAttach (ND_LOCAL_NODE, serverpid, 1, _NTO_SIDE_CHANNEL, 0);
+	if (coid == -1) {
+		fprintf (stderr, "Couldn't ConnectAttach\n");
+		perror (NULL);
+		exit(EXIT_FAILURE);
+	}*/
     while (1) {
     	rcvid = MsgReceive (chid, &current, sizeof (current), NULL);
     	switch(current.choice){
     		case 0:
     			left_scan();
+    			/*if (MsgSend (coid, &future, sizeof(future), &current, sizeof (current)) == -1) {
+    				fprintf (stderr, "Error during MsgSend\n");
+    				perror (NULL);
+    				exit (EXIT_FAILURE);
+    			}*/
+    			printf("I'm out\n");
     			break;
     		default:
     			break;
     	}
+    	MsgReply (rcvid, EOK, &res, sizeof(res));
     }
-	MsgReply (rcvid, EOK, &current, sizeof(current));
-	printf("%d\n",current.state);
+
+    ChannelDestroy(chid);
 	return EXIT_SUCCESS;
 }
 /**********************************************************************
@@ -68,13 +74,9 @@ int main(int argc, char* argv[]) {
  * 					void left_scan(void)
  *********************************************************************/
 void left_scan(void){
-	current.state=LEFT_SCAN;
-	strcpy(current.outMessage,"Left Scan");
-	if (MsgSend (coid, &current, sizeof(current), &current, sizeof (current)) == -1) {
-		fprintf (stderr, "Error during MsgSend\n");
-		perror (NULL);
-		exit (EXIT_FAILURE);
-	}
+	printf("I am here\n");
+	//current.state=LEFT_SCAN;
+	strcpy(res.response,"Left Scan");
 }
 /**********************************************************************
  *
