@@ -8,55 +8,45 @@
 #ifndef PROJ_H_
 #define PROJ_H_
 
-#define NUM_STATES 8
+#define NUM_STATES 12
 typedef enum {
-	START_STATE = 0,
-	READY_STATE = 1,
-	LEFT_DOWN_STATE = 2,
-	RIGHT_DOWN_STATE = 3,
-	ARMED_STATE = 4,
-	PUNCH_STATE = 5,
-	EXIT_STATE = 6,
-	STOP_STATE = 7
+	LEFT_SCAN = 0,
+	RIGHT_SCAN = 1,
+	LEFT_OPEN = 2,
+	RIGHT_OPEN = 3,
+	LEFT_CLOSE = 4,
+	RIGHT_CLOSE = 5,
+	GUARD_LU = 6,
+	GUARD_LL = 7,
+	GUARD_RU = 8,
+	GUARD_RL = 9,
+	WEIGHT = 10,
+	EXIT = 11
 } State;
 
-#define NUM_INPUTS 5
-typedef enum {
-	LEFT_BUTTON_DOWN = 0,
-	LEFT_BUTTON_UP = 1,
-	RIGHT_BUTTON_DOWN = 2,
-	RIGHT_BUTTON_UP = 3,
-	STOP_BUTTON = 4
-} Input;
 
-#define NUM_OUTPUTS 8
-typedef enum {
-	START_MSG = 0,
-	READY_MSG = 1,
-	LEFT_DOWN_MSG = 2,
-	RIGHT_DOWN_MSG = 3,
-	ARMED_MSG = 4,
-	PUNCH_MSG = 5,
-	EXIT_MSG = 6,
-	STOP_MSG = 7
-} Output;
+#define NUM_OUTPUTS 12
 
 const char *outMessage[NUM_OUTPUTS] = {
-		"Start Message",
-		"Ready.",
-		"Left Button Down = Press Right Button to Arm Press",
-		"Right Button Down - Press Left Button to Arm Press",
-		"DANGER - Press Armed",
-		"Punching.",
+		"Left Scan",
+		"Right Scan",
+		"Left Open.",
+		"Right Open",
+		"Left Close",
+		"Right Close",
+		"Guard Left Unlock",
+		"Guard Left Lock",
+		"Guard Right Unlock",
+		"Guard Right Lock"
+		"Weighing",
 		"Exiting.",
-		"Stop Message."
 };
 
-const char *inMessage[NUM_INPUTS] = {
-		"LD",
-		"LU",
-		"RD",
-		"RU",
-		"S"
-};
+struct currentState {
+	int state;
+	int input;
+	int outMessage;
+	int personId;
+	int weight;
+}currentState;
 #endif /* PROJ_H_ */
