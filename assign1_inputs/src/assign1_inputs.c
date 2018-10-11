@@ -72,7 +72,6 @@ int main(int argc, char* argv[]) {
    			exit (EXIT_FAILURE);
    		}
 
->>>>>>> refs/heads/Peter
 	}
 	printf("Bye bye LOSER");
 	return EXIT_SUCCESS;
