@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 	currentState current;
 	currentState response;
 	State state;
-	//int personid = 0;
+	int personid = 0;
 	//int weight = 0;
 
 	printf("Enter the event type\n");
@@ -31,6 +31,9 @@ int main(int argc, char* argv[]) {
 		scanf("%s",&choice);
 		if(strcmp(choice,"ls") == 0){
 			current.choice = 0;
+			printf("Please enter your person ID");
+			scanf("%d",&personid);
+			current.personId = personid;
 		}else if(strcmp(choice,"rs") == 0){
 			current.choice = 1;
 		}else if(strcmp(choice,"ws") == 0){
@@ -59,7 +62,6 @@ int main(int argc, char* argv[]) {
    			perror (NULL);
    			exit (EXIT_FAILURE);
    		}
-
 	}
 	printf("Bye bye LOSER");
 	return EXIT_SUCCESS;
