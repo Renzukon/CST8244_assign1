@@ -44,6 +44,7 @@ const char *outMessage[NUM_OUTPUTS] = {
 
 struct currentState {
 	int choice;
+	int missingchoice;
 	int state;
 	int input;
 	int outMessage;
