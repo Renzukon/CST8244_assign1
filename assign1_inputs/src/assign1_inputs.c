@@ -13,10 +13,8 @@ int main(int argc, char* argv[]) {
 	pid_t serverpid = atoi(argv[1]);
 	char choice[5];
 	currentState current;
-	currentState response;
-	State state;
 	int personid = 0;
-	//int weight = 0;
+	int weight = 0;
 
 	printf("Enter the event type\n");
 	printf("ls = left scan, rs = right scan, ws = weight scale, lo = left open,\nro = right open, lc = left closed, rc = right closed , gru = guard right unlock,\ngrl = guard right lock, gll=guard left lock,glu = guard left unlock\n");
@@ -38,6 +36,9 @@ int main(int argc, char* argv[]) {
 			current.choice = 1;
 		}else if(strcmp(choice,"ws") == 0){
 			current.choice = 2;
+			printf("Please enter your weight");
+			scanf("%d",&weight);
+			current.weight = weight;
 		}else if(strcmp(choice,"lo") == 0){
 			current.choice = 3;
 		}else if(strcmp(choice,"ll") == 0){
@@ -57,7 +58,7 @@ int main(int argc, char* argv[]) {
 		}else if(strcmp(choice,"exit") == 0){
 			current.choice = 11;
 		}
-   		if (MsgSend (coid, &current, sizeof(current), &response, sizeof (response)) == -1) {
+   		if (MsgSend (coid, &current, sizeof(current), &current, sizeof (current)) == -1) {
    			fprintf (stderr, "Error during MsgSend\n");
    			perror (NULL);
    			exit (EXIT_FAILURE);

@@ -27,6 +27,16 @@ void exit_program(void);
 currentState current;
 
 int main(int argc, char* argv[]) {
+
+	pid_t serverpid = atoi(argv[1]);
+	int  coid;
+	coid = ConnectAttach (ND_LOCAL_NODE, serverpid, 1, _NTO_SIDE_CHANNEL, 0);
+	if (coid == -1) {
+		fprintf (stderr, "Couldn't ConnectAttach\n");
+		perror (NULL);
+		exit(EXIT_FAILURE);
+	}
+
 	int     rcvid;
 	int     chid;
 
@@ -58,7 +68,13 @@ int main(int argc, char* argv[]) {
  * 					void left_scan(void)
  *********************************************************************/
 void left_scan(void){
-	current.state=0;
+	current.state=LEFT_SCAN;
+	strcpy(current.outMessage,"Left Scan");
+	if (MsgSend (coid, &current, sizeof(current), &current, sizeof (current)) == -1) {
+		fprintf (stderr, "Error during MsgSend\n");
+		perror (NULL);
+		exit (EXIT_FAILURE);
+	}
 }
 /**********************************************************************
  *

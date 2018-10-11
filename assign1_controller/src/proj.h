@@ -25,29 +25,14 @@ typedef enum {
 } State;
 
 
-#define NUM_OUTPUTS 12
-
-const char *outMessage[NUM_OUTPUTS] = {
-		"Left Scan",
-		"Right Scan",
-		"Left Open.",
-		"Right Open",
-		"Left Close",
-		"Right Close",
-		"Guard Left Unlock",
-		"Guard Left Lock",
-		"Guard Right Unlock",
-		"Guard Right Lock"
-		"Weighing",
-		"Exiting.",
-};
+#define NUM_OUTPUTS 13
 
 struct currentState {
 	int choice;
 	int missingchoice;
 	int state;
 	int input;
-	int outMessage;
+	char outMessage[128];
 	int personId;
 	int weight;
 }typedef currentState;
