@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
     }
     while (1) {
     	rcvid = MsgReceive (chid, &current, sizeof (current), NULL);
-    	switch(current.state){
+    	switch(current.choice){
     		case 0:
     			left_scan();
     			break;
@@ -58,7 +58,6 @@ int main(int argc, char* argv[]) {
  * 					void left_scan(void)
  *********************************************************************/
 void left_scan(void){
-
 
 
 }
