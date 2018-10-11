@@ -30,41 +30,29 @@ int main(int argc, char* argv[]) {
 	while(current.state != EXIT){
 		scanf("%s",&choice);
 		if(strcmp(choice,"ls") == 0){
-			state = LEFT_SCAN;
-			current.state = state;
+			current.choice = 0;
 		}else if(strcmp(choice,"rs") == 0){
-			state = RIGHT_SCAN;
-			current.state = state;
+			current.choice = 1;
 		}else if(strcmp(choice,"ws") == 0){
-			state = WEIGHT;
-			current.state = state;
+			current.choice = 2;
 		}else if(strcmp(choice,"lo") == 0){
-			state = LEFT_OPEN;
-			current.state = state;
+			current.choice = 3;
 		}else if(strcmp(choice,"ll") == 0){
-			state = LEFT_CLOSE;
-			current.state = state;
+			current.choice = 4;
 		}else if(strcmp(choice,"ro") == 0){
-			state = RIGHT_OPEN;
-			current.state = state;
+			current.choice = 5;
 		}else if(strcmp(choice,"rl") == 0){
-			state = RIGHT_CLOSE;
-			current.state = state;
+			current.choice = 6;
 		}else if(strcmp(choice,"gll") == 0){
-			state = GUARD_LL;
-			current.state = state;
+			current.choice = 7;
 		}else if(strcmp(choice,"glu") == 0){
-			state = GUARD_LU;
-			current.state = state;
+			current.choice = 8;
 		}else if(strcmp(choice,"grl") == 0){
-			state = GUARD_RL;
-			current.state = state;
+			current.choice = 9;
 		}else if(strcmp(choice,"gru") == 0){
-			state = GUARD_RU;
-			current.state = state;
+			current.choice = 10;
 		}else if(strcmp(choice,"exit") == 0){
-			state = EXIT;
-			current.state = state;
+			current.choice = 11;
 		}
    		if (MsgSend (coid, &current, sizeof(current), &response, sizeof (response)) == -1) {
    			fprintf (stderr, "Error during MsgSend\n");

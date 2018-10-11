@@ -5,16 +5,9 @@
 #include <sys/netmgr.h>
 #include <string.h>
 #include <ctype.h>
-<<<<<<< HEAD
 #include "proj.h"
-=======
 #include <errno.h>
->>>>>>> refs/heads/Peter
 
-<<<<<<< HEAD
-=======
-#include "proj.h"
->>>>>>> refs/heads/Peter
 
 //function prototypes
 
@@ -68,8 +61,6 @@ int main(int argc, char* argv[]) {
  * 					void left_scan(void)
  *********************************************************************/
 void left_scan(void){
-
-	current.state = 0;
 
 }
 /**********************************************************************
