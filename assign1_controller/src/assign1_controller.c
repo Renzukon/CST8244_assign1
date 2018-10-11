@@ -5,8 +5,16 @@
 #include <sys/netmgr.h>
 #include <string.h>
 #include <ctype.h>
+<<<<<<< HEAD
 #include "proj.h"
+=======
+#include <errno.h>
+>>>>>>> refs/heads/Peter
 
+<<<<<<< HEAD
+=======
+#include "proj.h"
+>>>>>>> refs/heads/Peter
 
 //function prototypes
 
@@ -23,35 +31,34 @@ void guard_RL(void);
 void weight(void);
 void exit_program(void);
 
-/**********************************************************************
- *
- * 					int main(void)
- *********************************************************************/
-int main(void) {
 
-	int rcvid;
-	int chid;
+currentState current;
 
-	currentState current;
-	currentState future;
+int main(int argc, char* argv[]) {
+	int     rcvid;
+	int     chid;
 
-	chid = ChannelCreate (0);
-	if(chid ==-1){
-		perror("failed to create channel");
-		exit(EXIT_FAILURE);
-	}
 
 	printf("The controller is running as process_id %d\n", getpid());
 
-	while(1){
-		rcvid = MsgReceive(chid,&current,sizeof(current),NULL);
-
-		printf("State: %d\n", current.state);
-		printf("Input: %d\n", current.input);
-		printf("Out Message: %d\n", current.outMessage);
-		printf("PersonID: %d\n", current.personId);
-		printf("Weight: %d\n", current.weight);
-	}
+    chid = ChannelCreate (0);
+    if (chid == -1)
+    {
+    	perror("failed to create the channel.");
+    	exit (EXIT_FAILURE);
+    }
+    while (1) {
+    	rcvid = MsgReceive (chid, &current, sizeof (current), NULL);
+    	switch(current.state){
+    		case 0:
+    			left_scan();
+    			break;
+    		default:
+    			break;
+    	}
+    }
+	MsgReply (rcvid, EOK, &current, sizeof(current));
+	printf("%d\n",current.state);
 
 	return EXIT_SUCCESS;
 }
@@ -62,7 +69,7 @@ int main(void) {
  *********************************************************************/
 void left_scan(void){
 
-
+	current.state = 0
 
 }
 /**********************************************************************

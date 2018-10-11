@@ -8,7 +8,7 @@
 
 #include "proj.h"
 
-int main(void) {
+int main(int argc, char* argv[]) {
 	printf("The display is running as process_id %d\n", getpid());
 	return EXIT_SUCCESS;
 }
