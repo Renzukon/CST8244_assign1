@@ -9,10 +9,27 @@
 
 #include "proj.h"
 
+//function prototypes
+
+void left_scan(void);
+void right_scan(void);
+void left_open(void);
+void right_open(void);
+void left_close(void);
+void right_close(void);
+void guard_LU(void);
+void guard_LL(void);
+void guard_RU(void);
+void guard_RL(void);
+void weight(void);
+void exit_program(void);
+
+currentState current;
+
 int main(int argc, char* argv[]) {
 	int     rcvid;
 	int     chid;
-	currentState current;
+
 
 	printf("The controller is running as process_id %d\n", getpid());
 
@@ -26,11 +43,99 @@ int main(int argc, char* argv[]) {
     	rcvid = MsgReceive (chid, &current, sizeof (current), NULL);
     	switch(current.state){
     		case 0:
-    			current.outMessage = 0;
+    			left_scan();
+    			break;
+    		default:
     			break;
     	}
     }
 	MsgReply (rcvid, EOK, &current, sizeof(current));
 	printf("%d\n",current.state);
 	return EXIT_SUCCESS;
+}
+/**********************************************************************
+ *
+ * 					void left_scan(void)
+ *********************************************************************/
+void left_scan(void){
+
+
+
+}
+/**********************************************************************
+ *
+ * 					void right_scan(void)
+ *********************************************************************/
+void right_scan(void){
+
+}
+/**********************************************************************
+ *
+ * 					void left_open(void)
+ *********************************************************************/
+void left_open(void){
+
+}
+/**********************************************************************
+ *
+ * 					void right_open(void)
+ *********************************************************************/
+void right_open(void){
+
+}
+/**********************************************************************
+ *
+ * 					void left_close(void)
+ *********************************************************************/
+void left_close(void){
+
+}
+/**********************************************************************
+ *
+ * 					void right_close(void)
+ *********************************************************************/
+void right_close(void){
+
+}
+/**********************************************************************
+ *
+ * 					void guard_LU(void)
+ *********************************************************************/
+void guard_LU(void){
+
+}
+/**********************************************************************
+ *
+ * 					void guard_LL(void)
+ *********************************************************************/
+void guard_LL(void){
+
+}
+/**********************************************************************
+ *
+ * 					void guard_RU(void)
+ *********************************************************************/
+void guard_RU(void){
+
+}
+/**********************************************************************
+ *
+ * 					void guard_RL(void)
+ *********************************************************************/
+void guard_RL(void){
+
+}
+/**********************************************************************
+ *
+ * 					void weight(void)
+ *********************************************************************/
+void weight(void){
+
+}
+/**********************************************************************
+ *
+ * 					void exit(void)
+ *********************************************************************/
+void exit_program(void){
+
 }
