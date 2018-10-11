@@ -11,29 +11,30 @@
 
 //function prototypes
 
-void left_scan(void);
-void right_scan(void);
-void left_open(void);
-void right_open(void);
-void left_close(void);
-void right_close(void);
-void guard_LU(void);
-void guard_LL(void);
-void guard_RU(void);
-void guard_RL(void);
-void weight(void);
-void exit_program(void);
+void *left_scan();
+void *right_scan();
+void *left_open();
+void *right_open();
+void *left_close();
+void *right_close();
+void *guard_LU();
+void *guard_LL();
+void *guard_RU();
+void *guard_RL();
+void *weight();
+void *exit_program();
 
+currentState current;
+int  coid;
 response res;
-
 int main(int argc, char* argv[]) {
 
-	//pid_t serverpid = atoi(argv[1]);
+	pid_t serverpid = atoi(argv[1]);
 	int  rcvid;
 	int  chid;
-	currentState current;
 
-	//int  coid;
+
+
 
     chid = ChannelCreate (0);
     if (chid == -1)
@@ -42,28 +43,57 @@ int main(int argc, char* argv[]) {
     	exit (EXIT_FAILURE);
     }
 	printf("The controller is running as process_id %d\n", getpid());
-	/*coid = ConnectAttach (ND_LOCAL_NODE, serverpid, 1, _NTO_SIDE_CHANNEL, 0);
+	coid = ConnectAttach (ND_LOCAL_NODE, serverpid, 1, _NTO_SIDE_CHANNEL, 0);
 	if (coid == -1) {
 		fprintf (stderr, "Couldn't ConnectAttach\n");
 		perror (NULL);
 		exit(EXIT_FAILURE);
-	}*/
+	}
     while (1) {
     	rcvid = MsgReceive (chid, &current, sizeof (current), NULL);
     	switch(current.choice){
     		case 0:
-    			left_scan();
-    			/*if (MsgSend (coid, &future, sizeof(future), &current, sizeof (current)) == -1) {
-    				fprintf (stderr, "Error during MsgSend\n");
-    				perror (NULL);
-    				exit (EXIT_FAILURE);
-    			}*/
-    			printf("I'm out\n");
+        		left_scan();
+    			break;
+    		case 1:
+    			right_scan();
+    			break;
+    		case 2:
+    			left_open();
+    			break;
+    		case 3:
+    			right_open();
+    			break;
+    		case 4:
+    			left_close();
+    			break;
+    		case 5:
+    			right_close();
+    			break;
+    		case 6:
+    			guard_LU();
+    			break;
+    		case 7:
+    			guard_LL();
+    			break;
+    		case 8:
+    			guard_RU();
+    			break;
+    		case 9:
+    			guard_RL();
+    			break;
+    		case 10:
+    			weight();
+    			break;
+    		case 11:
+    			exit_program();
+    			printf("Exiting Controller");
+    			exit(1);
     			break;
     		default:
     			break;
     	}
-    	MsgReply (rcvid, EOK, &res, sizeof(res));
+    	MsgReply (rcvid, EOK, &current, sizeof(current));
     }
 
     ChannelDestroy(chid);
@@ -71,87 +101,185 @@ int main(int argc, char* argv[]) {
 }
 /**********************************************************************
  *
- * 					void left_scan(void)
+ * 				0	void left_scan(void) 0,6,2,4,7,8,3,5,9,11
  *********************************************************************/
-void left_scan(void){
-	printf("I am here\n");
-	//current.state=LEFT_SCAN;
-	strcpy(res.response,"Left Scan");
+void *left_scan(){
+	current.state=LEFT_SCAN;
+	res.state = 1;
+	strcpy(res.response,"Left Scan\n");
+	res.personId = current.personId;
+	if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+		fprintf (stderr, "Error during MsgSend\n");
+		perror (NULL);
+		exit (EXIT_FAILURE);
+	}
+	return guard_LU();
 }
 /**********************************************************************
  *
- * 					void right_scan(void)
+ * 				1	void right_scan(void) 1,8,3,5,9,6,2,4,7,11
  *********************************************************************/
-void right_scan(void){
-
+void *right_scan(){
+	current.state=RIGHT_SCAN;
+		strcpy(res.response,"Right Scan");
+		res.state = 1;
+		res.personId = current.personId;
+		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+			fprintf (stderr, "Error during MsgSend\n");
+			perror (NULL);
+			exit (EXIT_FAILURE);
+		}
+	return guard_RU();
 }
 /**********************************************************************
  *
- * 					void left_open(void)
+ * 				2	void left_open(void)
  *********************************************************************/
-void left_open(void){
-
+void *left_open(){
+	current.state=LEFT_OPEN;
+	res.state = 0;
+	strcpy(res.response,"Left door open");
+		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+			fprintf (stderr, "Error during MsgSend\n");
+			perror (NULL);
+			exit (EXIT_FAILURE);
+		}
+	return left_close();
 }
 /**********************************************************************
  *
- * 					void right_open(void)
+ * 				3	void right_open(void)
  *********************************************************************/
-void right_open(void){
-
+void *right_open(){
+	current.state=RIGHT_OPEN;
+	res.state = 0;
+		strcpy(res.response,"right door open");
+			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+				fprintf (stderr, "Error during MsgSend\n");
+				perror (NULL);
+				exit (EXIT_FAILURE);
+			}
+	return right_close();
 }
 /**********************************************************************
  *
- * 					void left_close(void)
+ * 				4	void left_close(void)
  *********************************************************************/
-void left_close(void){
-
+void *left_close(){
+	current.state=LEFT_CLOSE;
+	res.state = 0;
+			strcpy(res.response,"left door close");
+				if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+					fprintf (stderr, "Error during MsgSend\n");
+					perror (NULL);
+					exit (EXIT_FAILURE);
+				}
+	return guard_LL();
 }
 /**********************************************************************
  *
- * 					void right_close(void)
+ * 				5	void right_close(void)
  *********************************************************************/
-void right_close(void){
-
+void *right_close(){
+	current.state=RIGHT_CLOSE;
+	res.state = 0;
+				strcpy(res.response,"right door close");
+					if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+						fprintf (stderr, "Error during MsgSend\n");
+						perror (NULL);
+						exit (EXIT_FAILURE);
+					}
+	return guard_RL();
 }
 /**********************************************************************
  *
- * 					void guard_LU(void)
+ * 				6	void guard_LU(void)
  *********************************************************************/
-void guard_LU(void){
+void *guard_LU(){
 
+	current.state=GUARD_LU;
+	res.state = 0;
+		strcpy(res.response,"Guard Left unlock");
+		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+			fprintf (stderr, "Error during MsgSend\n");
+			perror (NULL);
+			exit (EXIT_FAILURE);
+		}
+	return left_open();
 }
 /**********************************************************************
  *
- * 					void guard_LL(void)
+ * 				7	void guard_LL(void)
  *********************************************************************/
-void guard_LL(void){
-
+void *guard_LL(){
+	current.state=GUARD_LL;
+	res.state = 0;
+			strcpy(res.response,"Guard Left lock");
+			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+				fprintf (stderr, "Error during MsgSend\n");
+				perror (NULL);
+				exit (EXIT_FAILURE);
+			}
+	return 0;
 }
 /**********************************************************************
  *
- * 					void guard_RU(void)
+ * 				8	void guard_RU(void)
  *********************************************************************/
-void guard_RU(void){
-
+void *guard_RU(){
+	current.state=GUARD_RU;
+	res.state = 0;
+			strcpy(res.response,"Guard right unlock");
+			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+				fprintf (stderr, "Error during MsgSend\n");
+				perror (NULL);
+				exit (EXIT_FAILURE);
+			}
+	return right_open();
 }
 /**********************************************************************
  *
- * 					void guard_RL(void)
+ * 				9	void guard_RL(void)
  *********************************************************************/
-void guard_RL(void){
-
+void *guard_RL(){
+	current.state=GUARD_RL;
+	res.state = 0;
+			strcpy(res.response,"Guard right lock");
+			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+				fprintf (stderr, "Error during MsgSend\n");
+				perror (NULL);
+				exit (EXIT_FAILURE);
+			}
+	return 0;
 }
 /**********************************************************************
  *
- * 					void weight(void)
+ * 				10	void weight(void)
  *********************************************************************/
-void weight(void){
-
+void *weight(){
+	current.state=WEIGHT;
+	strcpy(res.response,"WEIGHING...");
+	res.state = 2;
+	res.weight = current.weight;
+	if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+		fprintf (stderr, "Error during MsgSend\n");
+		perror (NULL);
+		exit (EXIT_FAILURE);
+	}
+	return 0;
 }
 /**********************************************************************
  *
- * 					void exit(void)
+ * 				11   void exit(void)
  *********************************************************************/
-void exit_program(void){
-
+void *exit_program(){
+	current.state = EXIT;
+	res.state = -1;
+	strcpy(res.response,"EXITING...");
+		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+			fprintf (stderr, "Error during MsgSend\n");
+			perror (NULL);
+			exit (EXIT_FAILURE);
+		}
+	return 0;
 }

@@ -19,15 +19,18 @@ typedef enum {
 
 struct currentState {
 	int choice;
-	int missingchoice;
 	int state;
-	int input;
+	int next;
+	int direction;
 	int personId;
 	int weight;
 }typedef currentState;
 
 struct response {
 	char response[128];
+	int weight;
+	int personId;
+	int state;
 }typedef response;
 
 #endif

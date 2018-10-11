@@ -10,17 +10,10 @@
 #include "proj.h"
 
 int main(int argc, char* argv[]) {
-	currentState current;
+	response res;
 
 	int     rcvid;
 	int     chid;
-
-    chid = ChannelCreate (0);
-    if (chid == -1)
-    {
-    	perror("failed to create the channel.");
-    	exit (EXIT_FAILURE);
-    }
 
 	printf("The display is running as process_id %d\n", getpid());
 	printf("[status update : initial startup]\n");
@@ -32,9 +25,20 @@ int main(int argc, char* argv[]) {
 	   	exit (EXIT_FAILURE);
 	}
 	while (1) {
-	   	rcvid = MsgReceive (chid, &current, sizeof (current), NULL);
-	   	printf("[status update : %s ]\n",current.outMessage);
+	   	rcvid = MsgReceive (chid, &res, sizeof (res), NULL);
+	   	if(res.state == 1){
+	   		printf("[status update : %s Person Id : %d ]\n",res.response,res.personId);
+	   	}else if(res.state == 2){
+	   		printf("[status update : %s Weight : %d ]\n",res.response,res.weight);
+	   	}else if(res.state == 0){
+		   	printf("[status update : %s ]\n",res.response);
+	   	}
+	   	if(res.state == -1){
+	   		printf("Exiting Display");
+	   		exit(1);
+	   	}
+	   	MsgReply (rcvid, EOK, &res, sizeof(res));
 	}
-	MsgReply (rcvid, EOK, &current, sizeof(current));
+
 	return EXIT_SUCCESS;
 }
