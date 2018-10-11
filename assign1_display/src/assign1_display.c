@@ -2,6 +2,6 @@
 #include <stdlib.h>
 
 int main(void) {
-	puts("Hello World!!!"); /* prints Hello World!!! */
+	printf("The display is running as process_id %d\n", getpid());
 	return EXIT_SUCCESS;
 }
