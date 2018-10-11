@@ -7,20 +7,13 @@
 #include <ctype.h>
 #include <errno.h>
 
-#include <proj.h>
+#include "proj.h"
 
 int main(int argc, char* argv[]) {
-	currentState current;
+	response res;
 
 	int     rcvid;
 	int     chid;
-
-    chid = ChannelCreate (0);
-    if (chid == -1)
-    {
-    	perror("failed to create the channel.");
-    	exit (EXIT_FAILURE);
-    }
 
 	printf("The display is running as process_id %d\n", getpid());
 	printf("[status update : initial startup]\n");
@@ -32,9 +25,10 @@ int main(int argc, char* argv[]) {
 	   	exit (EXIT_FAILURE);
 	}
 	while (1) {
-	   	rcvid = MsgReceive (chid, &current, sizeof (current), NULL);
-	   	printf("[status update : %s ]\n",current.outMessage);
+	   	rcvid = MsgReceive (chid, &res, sizeof (res), NULL);
+	   	printf("[status update : %s ]\n",res.response);
+	   	MsgReply (rcvid, EOK, &res, sizeof(res));
 	}
-	MsgReply (rcvid, EOK, &current, sizeof(current));
+
 	return EXIT_SUCCESS;
 }

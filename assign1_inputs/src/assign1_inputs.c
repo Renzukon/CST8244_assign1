@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
 		    exit (EXIT_FAILURE);
 		}
 
-   		if (MsgSend (coid, &current, sizeof(current), &response, sizeof (response)) == -1) {
+   		if (MsgSend (coid, &current, sizeof(current), &current, sizeof (current)) == -1) {
    			fprintf (stderr, "Error during MsgSend\n");
    			perror (NULL);
    			exit (EXIT_FAILURE);
