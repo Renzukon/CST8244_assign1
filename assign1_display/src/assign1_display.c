@@ -32,13 +32,12 @@ int main(int argc, char* argv[]) {
 	   	}else{
 		   	printf("%s\n",outMessage[res.responseCode]);
 	   	}
-
+	   	MsgReply (rcvid, EOK, &res, sizeof(res));
 	   	if(res.responseCode == 12){
 	   		printf("Exiting Display\n");
 	   	    ChannelDestroy(chid);
 	   		exit(1);
 	   	}
-	   	MsgReply (rcvid, EOK, &res, sizeof(res));
 	}
 
 	return EXIT_SUCCESS;
