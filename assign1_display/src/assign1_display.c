@@ -11,7 +11,6 @@
 
 int main(int argc, char* argv[]) {
 	response res;
-
 	int     rcvid;
 	int     chid;
 
@@ -26,14 +25,8 @@ int main(int argc, char* argv[]) {
 	}
 	while (1) {
 	   	rcvid = MsgReceive (chid, &res, sizeof (res), NULL);
-	   	if(res.state == 1){
-	   		printf("[status update : %s Person Id : %d ]\n",res.response,res.personId);
-	   	}else if(res.state == 2){
-	   		printf("[status update : %s Weight : %d ]\n",res.response,res.weight);
-	   	}else if(res.state == 0){
-		   	printf("[status update : %s ]\n",res.response);
-	   	}
-	   	if(res.state == -1){
+	   	printf("%s",outMessage[res.responseCode]);
+	   	if(res.responseCode == 12){
 	   		printf("Exiting Display");
 	   		exit(1);
 	   	}

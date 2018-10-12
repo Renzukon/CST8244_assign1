@@ -33,9 +33,6 @@ int main(int argc, char* argv[]) {
 	int  rcvid;
 	int  chid;
 
-
-
-
     chid = ChannelCreate (0);
     if (chid == -1)
     {
@@ -105,9 +102,7 @@ int main(int argc, char* argv[]) {
  *********************************************************************/
 void *left_scan(){
 	current.state=LEFT_SCAN;
-	res.state = 1;
-	strcpy(res.response,"Left Scan\n");
-	res.personId = current.personId;
+	res.responseCode = 1;
 	if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 		fprintf (stderr, "Error during MsgSend\n");
 		perror (NULL);
@@ -121,9 +116,7 @@ void *left_scan(){
  *********************************************************************/
 void *right_scan(){
 	current.state=RIGHT_SCAN;
-		strcpy(res.response,"Right Scan");
-		res.state = 1;
-		res.personId = current.personId;
+		res.responseCode = 2;
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 			fprintf (stderr, "Error during MsgSend\n");
 			perror (NULL);
@@ -137,7 +130,7 @@ void *right_scan(){
  *********************************************************************/
 void *left_open(){
 	current.state=LEFT_OPEN;
-	res.state = 0;
+	res.responseCode = 3;
 	strcpy(res.response,"Left door open");
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 			fprintf (stderr, "Error during MsgSend\n");
@@ -152,7 +145,7 @@ void *left_open(){
  *********************************************************************/
 void *right_open(){
 	current.state=RIGHT_OPEN;
-	res.state = 0;
+	res.responseCode = 4;
 		strcpy(res.response,"right door open");
 			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 				fprintf (stderr, "Error during MsgSend\n");
@@ -167,7 +160,7 @@ void *right_open(){
  *********************************************************************/
 void *left_close(){
 	current.state=LEFT_CLOSE;
-	res.state = 0;
+	res.responseCode = 5;
 			strcpy(res.response,"left door close");
 				if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 					fprintf (stderr, "Error during MsgSend\n");
@@ -182,7 +175,7 @@ void *left_close(){
  *********************************************************************/
 void *right_close(){
 	current.state=RIGHT_CLOSE;
-	res.state = 0;
+	res.responseCode = 6;
 				strcpy(res.response,"right door close");
 					if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 						fprintf (stderr, "Error during MsgSend\n");
@@ -198,7 +191,7 @@ void *right_close(){
 void *guard_LU(){
 
 	current.state=GUARD_LU;
-	res.state = 0;
+	res.responseCode = 7;
 		strcpy(res.response,"Guard Left unlock");
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 			fprintf (stderr, "Error during MsgSend\n");
@@ -213,7 +206,7 @@ void *guard_LU(){
  *********************************************************************/
 void *guard_LL(){
 	current.state=GUARD_LL;
-	res.state = 0;
+	res.responseCode = 8;
 			strcpy(res.response,"Guard Left lock");
 			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 				fprintf (stderr, "Error during MsgSend\n");
@@ -228,7 +221,7 @@ void *guard_LL(){
  *********************************************************************/
 void *guard_RU(){
 	current.state=GUARD_RU;
-	res.state = 0;
+	res.responseCode = 9;
 			strcpy(res.response,"Guard right unlock");
 			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 				fprintf (stderr, "Error during MsgSend\n");
@@ -243,7 +236,7 @@ void *guard_RU(){
  *********************************************************************/
 void *guard_RL(){
 	current.state=GUARD_RL;
-	res.state = 0;
+	res.responseCode = 10;
 			strcpy(res.response,"Guard right lock");
 			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 				fprintf (stderr, "Error during MsgSend\n");
@@ -258,9 +251,7 @@ void *guard_RL(){
  *********************************************************************/
 void *weight(){
 	current.state=WEIGHT;
-	strcpy(res.response,"WEIGHING...");
-	res.state = 2;
-	res.weight = current.weight;
+	res.responseCode = 11;
 	if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 		fprintf (stderr, "Error during MsgSend\n");
 		perror (NULL);
@@ -274,8 +265,7 @@ void *weight(){
  *********************************************************************/
 void *exit_program(){
 	current.state = EXIT;
-	res.state = -1;
-	strcpy(res.response,"EXITING...");
+	res.responseCode = 12;
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 			fprintf (stderr, "Error during MsgSend\n");
 			perror (NULL);
