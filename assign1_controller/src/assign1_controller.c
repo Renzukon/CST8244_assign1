@@ -10,7 +10,7 @@
 #include "proj.h"
 
 //function prototypes
-
+void *initial_state();
 void *left_scan();
 void *right_scan();
 void *left_open();
@@ -24,6 +24,8 @@ void *guard_RL();
 void *weight();
 void *exit_program();
 
+typedef void *(*StateFunc)();
+StateFunc statefunc = initial_state;
 currentState current;
 int  coid;
 response res;
@@ -50,56 +52,22 @@ int main(int argc, char* argv[]) {
 	}
     while (1) {
     	rcvid = MsgReceive (chid, &current, sizeof (current), NULL);
-    	/*switch(current.choice){
-    		case 0:
-    			left_scan();
-    			break;
-    		case 1:
-    			right_scan();
-    			break;
-    		case 2:
-    			left_open();
-    			break;
-    		case 3:
-    			right_open();
-    			break;
-    		case 4:
-    			left_close();
-    			break;
-    		case 5:
-    			right_close();
-    			break;
-    		case 6:
-    			guard_LU();
-    			break;
-    		case 7:
-    			guard_LL();
-    			break;
-    		case 8:
-    			guard_RU();
-    			break;
-    		case 9:
-    			guard_RL();
-    			break;
-    		case 10:
-    			weight();
-    			break;
-    		case 11:
-    			exit_program();
-    			printf("exiting\n");
-    			break;
-    		default:
-    			break;
-    	}*/
 
-    	if(current.choice == 0){
-    		left_scan();
-    	}
+    	statefunc = (StateFunc)(*statefunc)();
     	MsgReply (rcvid, EOK, &current, sizeof(current));
     }
 
     ChannelDestroy(chid);
 	return EXIT_SUCCESS;
+}
+
+void *initial_state(){
+
+	if(current.choice==0)
+		statefunc = left_scan;
+	if(current.choice ==2)
+		statefunc = right_scan;
+	return statefunc;
 }
 /**********************************************************************
  *
@@ -113,12 +81,8 @@ void *left_scan(){
 		perror (NULL);
 		exit (EXIT_FAILURE);
 	}
-	printf("CHOICE: %d\n", current.choice);
-	while(current.choice != GUARD_LU){
-		return guard_LU();
-	}
-
-	return 0;
+	statefunc = guard_LU;
+	return statefunc;
 
 }
 /**********************************************************************
