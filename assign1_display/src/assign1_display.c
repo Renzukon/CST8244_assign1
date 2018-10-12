@@ -25,13 +25,25 @@ int main(int argc, char* argv[]) {
 	}
 	while (1) {
 	   	rcvid = MsgReceive (chid, &res, sizeof (res), NULL);
-	   	if(res.responseCode == 1 || res.responseCode == 2){
-		   	printf("%s %d\n",outMessage[res.responseCode],res.current.personId);
-	   	}else if(res.responseCode == 11){
-	   		printf("%s %d\n",outMessage[res.responseCode],res.current.weight);
-	   	}else{
-		   	printf("%s\n",outMessage[res.responseCode]);
+	   	switch(res.responseCode){
+	   		case LEFT_SCAN:
+	   		case RIGHT_SCAN:
+	   			printf("%s %d\n",outMessage[res.responseCode],res.current.personId);
+	   			break;
+	   		case WEIGHT:
+	   			printf("%s %d\n",outMessage[res.responseCode],res.current.weight);
+	   			break;
+	   		default:
+	   			printf("%s\n",outMessage[res.responseCode]);
+	   			break;
 	   	}
+//	   	if(res.responseCode == 1 || res.responseCode == 2){
+//		   	printf("%s %d\n",outMessage[res.responseCode],res.current.personId);
+//	   	}else if(res.responseCode == 11){
+//	   		printf("%s %d\n",outMessage[res.responseCode],res.current.weight);
+//	   	}else{
+//		   	printf("%s\n",outMessage[res.responseCode]);
+//	   	}
 	   	MsgReply (rcvid, EOK, &res, sizeof(res));
 	   	if(res.responseCode == 12){
 	   		printf("Exiting Display\n");
