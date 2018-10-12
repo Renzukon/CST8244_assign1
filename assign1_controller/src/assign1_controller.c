@@ -61,11 +61,12 @@ int main(int argc, char* argv[]) {
 }
 
 void *initial_state(){
-
-	if(current.choice==0)
+	if(current.state==LEFT_SCAN)
 		statefunc = left_scan;
-	if(current.choice ==2)
+		current.direction = LEFT_SCAN;
+	if(current.state ==2)
 		statefunc = right_scan;
+		current.direction = RIGHT_SCAN;
 	return statefunc;
 }
 /**********************************************************************
@@ -103,7 +104,6 @@ void *right_scan(){
 void *left_open(){
 	current.state=LEFT_OPEN;
 	res.responseCode = 3;
-	strcpy(res.response,"Left door open");
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 			fprintf (stderr, "Error during MsgSend\n");
 			perror (NULL);
@@ -118,7 +118,6 @@ void *left_open(){
 void *right_open(){
 	current.state=RIGHT_OPEN;
 	res.responseCode = 4;
-		strcpy(res.response,"right door open");
 			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 				fprintf (stderr, "Error during MsgSend\n");
 				perror (NULL);
@@ -133,7 +132,6 @@ void *right_open(){
 void *left_close(){
 	current.state=LEFT_CLOSE;
 	res.responseCode = 5;
-			strcpy(res.response,"left door close");
 				if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 					fprintf (stderr, "Error during MsgSend\n");
 					perror (NULL);
@@ -148,7 +146,6 @@ void *left_close(){
 void *right_close(){
 	current.state=RIGHT_CLOSE;
 	res.responseCode = 6;
-				strcpy(res.response,"right door close");
 					if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 						fprintf (stderr, "Error during MsgSend\n");
 						perror (NULL);
@@ -164,7 +161,6 @@ void *guard_LU(){
 
 	current.state=GUARD_LU;
 	res.responseCode = 7;
-		strcpy(res.response,"Guard Left unlock");
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 			fprintf (stderr, "Error during MsgSend\n");
 			perror (NULL);
@@ -179,7 +175,6 @@ void *guard_LU(){
 void *guard_LL(){
 	current.state=GUARD_LL;
 	res.responseCode = 8;
-			strcpy(res.response,"Guard Left lock");
 			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 				fprintf (stderr, "Error during MsgSend\n");
 				perror (NULL);
@@ -194,7 +189,6 @@ void *guard_LL(){
 void *guard_RU(){
 	current.state=GUARD_RU;
 	res.responseCode = 9;
-			strcpy(res.response,"Guard right unlock");
 			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 				fprintf (stderr, "Error during MsgSend\n");
 				perror (NULL);
@@ -209,7 +203,6 @@ void *guard_RU(){
 void *guard_RL(){
 	current.state=GUARD_RL;
 	res.responseCode = 10;
-			strcpy(res.response,"Guard right lock");
 			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 				fprintf (stderr, "Error during MsgSend\n");
 				perror (NULL);

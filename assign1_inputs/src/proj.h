@@ -18,24 +18,9 @@ typedef enum {
 	EXIT = 12
 } State;
 
-#define NUM_INPUTS 13;
-typedef enum {
-	INITIAL = 0,
-	LEFT_SCAN = 1,
-	RIGHT_SCAN = 2,
-	LEFT_OPEN = 3,
-	RIGHT_OPEN = 4,
-	LEFT_CLOSE = 5,
-	RIGHT_CLOSE = 6,
-	GUARD_LU = 7,
-	GUARD_LL = 8,
-	GUARD_RU = 9,
-	GUARD_RL = 10,
-	WEIGHT = 11,
-	EXIT = 12
-} Input;
+#define NUM_INPUTS 13
 
-const char *inMessage[NUM_INPUTSS] = {
+const char *inMessage[NUM_INPUTS] = {
 		"",
 		"ls",
 		"rs",
@@ -52,21 +37,6 @@ const char *inMessage[NUM_INPUTSS] = {
 };
 
 #define NUM_OUTPUTS 13	// where n equals the number of output messages from the FSM.
-typedef enum {
-	INITIAL = 0,
-	LEFT_SCAN = 1,
-	RIGHT_SCAN = 2,
-	LEFT_OPEN = 3,
-	RIGHT_OPEN = 4,
-	LEFT_CLOSE = 5,
-	RIGHT_CLOSE = 6,
-	GUARD_LU = 7,
-	GUARD_LL = 8,
-	GUARD_RU = 9,
-	GUARD_RL = 10,
-	WEIGHT = 11,
-	EXIT = 12
-} Output;
 
 const char *outMessage[NUM_OUTPUTS] = {
 	"",
@@ -85,6 +55,7 @@ const char *outMessage[NUM_OUTPUTS] = {
 };
 
 struct currentState {
+
 	int state;
 	int direction;
 	int personId;
