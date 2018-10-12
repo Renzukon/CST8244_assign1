@@ -81,7 +81,7 @@ void *left_scan(){
 		perror (NULL);
 		exit (EXIT_FAILURE);
 	}
-	return guard_LU();
+	return statefunc;
 }
 /**********************************************************************
  *
@@ -95,7 +95,7 @@ void *right_scan(){
 			perror (NULL);
 			exit (EXIT_FAILURE);
 		}
-	return guard_RU();
+		return statefunc;
 }
 /**********************************************************************
  *
@@ -109,7 +109,7 @@ void *left_open(){
 			perror (NULL);
 			exit (EXIT_FAILURE);
 		}
-	return left_close();
+		return statefunc;
 }
 /**********************************************************************
  *
@@ -123,7 +123,7 @@ void *right_open(){
 				perror (NULL);
 				exit (EXIT_FAILURE);
 			}
-	return right_close();
+			return statefunc;
 }
 /**********************************************************************
  *
@@ -137,7 +137,7 @@ void *left_close(){
 					perror (NULL);
 					exit (EXIT_FAILURE);
 				}
-	return guard_LL();
+				return statefunc;
 }
 /**********************************************************************
  *
@@ -151,7 +151,7 @@ void *right_close(){
 						perror (NULL);
 						exit (EXIT_FAILURE);
 					}
-	return guard_RL();
+					return statefunc;
 }
 /**********************************************************************
  *
@@ -166,7 +166,7 @@ void *guard_LU(){
 			perror (NULL);
 			exit (EXIT_FAILURE);
 		}
-	return left_open();
+		return statefunc;
 }
 /**********************************************************************
  *
@@ -180,7 +180,7 @@ void *guard_LL(){
 				perror (NULL);
 				exit (EXIT_FAILURE);
 			}
-	return 0;
+			return statefunc;
 }
 /**********************************************************************
  *
@@ -194,7 +194,7 @@ void *guard_RU(){
 				perror (NULL);
 				exit (EXIT_FAILURE);
 			}
-	return right_open();
+			return statefunc;
 }
 /**********************************************************************
  *
@@ -208,7 +208,7 @@ void *guard_RL(){
 				perror (NULL);
 				exit (EXIT_FAILURE);
 			}
-	return 0;
+			return statefunc;
 }
 /**********************************************************************
  *
@@ -222,7 +222,7 @@ void *weight(){
 		perror (NULL);
 		exit (EXIT_FAILURE);
 	}
-	return 0;
+	return statefunc;
 }
 /**********************************************************************
  *
@@ -236,5 +236,5 @@ void *exit_program(){
 			perror (NULL);
 			exit (EXIT_FAILURE);
 		}
-	return 0;
+		return statefunc;
 }
