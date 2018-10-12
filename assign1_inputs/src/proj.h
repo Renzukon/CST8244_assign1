@@ -93,7 +93,7 @@ struct currentState {
 
 struct response {
 	currentState current;
-	int code;
+	int responseCode;
 }typedef response;
 
 #endif
