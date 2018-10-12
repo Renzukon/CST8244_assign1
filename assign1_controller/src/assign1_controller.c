@@ -78,14 +78,18 @@ void *initial_state(){
  * 				0	void left_scan(void) 0,6,2,4,7,8,3,5,9,11
  *********************************************************************/
 void *left_scan(){
-	res.responseCode = 1;
-	res.current.personId = current.personId;
-	if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
-		fprintf (stderr, "Error during MsgSend\n");
-		perror (NULL);
-		exit (EXIT_FAILURE);
+	if(current.state != LEFT_SCAN){
+		statefunc = left_scan;
+	}else{
+		res.responseCode = 1;
+		res.current.personId = current.personId;
+		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+			fprintf (stderr, "Error during MsgSend\n");
+			perror (NULL);
+			exit (EXIT_FAILURE);
+		}
+		statefunc = guard_LU;
 	}
-	statefunc = guard_LU;
 	return statefunc;
 }
 /**********************************************************************
@@ -93,6 +97,9 @@ void *left_scan(){
  * 				2	void right_scan(void)
  *********************************************************************/
 void *right_scan(){
+	if(current.state != RIGHT_SCAN){
+		statefunc = right_scan;
+	}else{
 		res.responseCode = 2;
 		res.current.personId = current.personId;
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -101,6 +108,7 @@ void *right_scan(){
 			exit (EXIT_FAILURE);
 		}
 		statefunc = guard_RU;
+	}
 		return statefunc;
 }
 /**********************************************************************
@@ -108,6 +116,9 @@ void *right_scan(){
  * 				3	void left_open(void)
  *********************************************************************/
 void *left_open(){
+	if(current.state != LEFT_OPEN){
+		statefunc = left_open;
+	}else{
 	res.responseCode = 3;
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 			fprintf (stderr, "Error during MsgSend\n");
@@ -119,13 +130,17 @@ void *left_open(){
 		}else if(current.direction == RIGHT_SCAN){
 			statefunc = left_close;
 		}
-		return statefunc;
+	}
+	return statefunc;
 }
 /**********************************************************************
  *
  * 				3	void right_open(void)
  *********************************************************************/
 void *right_open(){
+	if(current.state != RIGHT_OPEN){
+		statefunc = right_open;
+	}else{
 	res.responseCode = 4;
 			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 				fprintf (stderr, "Error during MsgSend\n");
@@ -137,117 +152,145 @@ void *right_open(){
 			}else if(current.direction == RIGHT_SCAN){
 				statefunc = weight;
 			}
-			return statefunc;
+	}
+	return statefunc;
 }
 /**********************************************************************
  *
  * 				4	void left_close(void)
  *********************************************************************/
 void *left_close(){
-	res.responseCode = 5;
-				if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
-					fprintf (stderr, "Error during MsgSend\n");
-					perror (NULL);
-					exit (EXIT_FAILURE);
-				}
-				statefunc = guard_LL;
-				return statefunc;
+	if(current.state != LEFT_CLOSE){
+		statefunc = left_close;
+	}else{
+		res.responseCode = 5;
+		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+			fprintf (stderr, "Error during MsgSend\n");
+			perror (NULL);
+			exit (EXIT_FAILURE);
+		}
+		statefunc = guard_LL;
+	}
+	return statefunc;
 }
 /**********************************************************************
  *
  * 				5	void right_close(void)
  *********************************************************************/
 void *right_close(){
-	res.responseCode = 6;
-					if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
-						fprintf (stderr, "Error during MsgSend\n");
-						perror (NULL);
-						exit (EXIT_FAILURE);
-					}
-					statefunc = guard_RL;
-					return statefunc;
+	if(current.state != RIGHT_CLOSE){
+		statefunc = right_close;
+	}else{
+		res.responseCode = 6;
+		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+			fprintf (stderr, "Error during MsgSend\n");
+			perror (NULL);
+			exit (EXIT_FAILURE);
+		}
+		statefunc = guard_RL;
+	}
+	return statefunc;
 }
 /**********************************************************************
  *
  * 				6	void guard_LU(void)
  *********************************************************************/
 void *guard_LU(){
-	res.responseCode = 7;
+	if(current.state != GUARD_LU){
+		statefunc = guard_LU;
+	}else{
+		res.responseCode = 7;
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 			fprintf (stderr, "Error during MsgSend\n");
 			perror (NULL);
 			exit (EXIT_FAILURE);
 		}
 		statefunc = left_open;
-		return statefunc;
+	}
+	return statefunc;
 }
 /**********************************************************************
  *
  * 				7	void guard_LL(void)
  *********************************************************************/
 void *guard_LL(){
-	res.responseCode = 8;
-			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
-				fprintf (stderr, "Error during MsgSend\n");
-				perror (NULL);
-				exit (EXIT_FAILURE);
-			}
-			if(current.direction == LEFT_SCAN){
-				statefunc = guard_RU;
-			}else if(current.direction == RIGHT_SCAN){
-				statefunc = exit_program;
-			}
-			return statefunc;
+	if(current.state != GUARD_LL){
+		statefunc = guard_LL;
+	}else{
+		res.responseCode = 8;
+		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+			fprintf (stderr, "Error during MsgSend\n");
+			perror (NULL);
+			exit (EXIT_FAILURE);
+		}
+		if(current.direction == LEFT_SCAN){
+			statefunc = guard_RU;
+		}else if(current.direction == RIGHT_SCAN){
+			statefunc = exit_program;
+		}
+	}
+	return statefunc;
 }
 /**********************************************************************
  *
  * 				8	void guard_RU(void)
  *********************************************************************/
 void *guard_RU(){
-	res.responseCode = 9;
-			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
-				fprintf (stderr, "Error during MsgSend\n");
-				perror (NULL);
-				exit (EXIT_FAILURE);
-			}
-			statefunc = right_open;
-			return statefunc;
+	if(current.state != GUARD_RU){
+		statefunc = guard_RU;
+	}else{
+		res.responseCode = 9;
+		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+			fprintf (stderr, "Error during MsgSend\n");
+			perror (NULL);
+			exit (EXIT_FAILURE);
+		}
+		statefunc = right_open;
+	}
+	return statefunc;
 }
 /**********************************************************************
  *
  * 				9	void guard_RL(void)
  *********************************************************************/
 void *guard_RL(){
-	res.responseCode = 10;
-			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
-				fprintf (stderr, "Error during MsgSend\n");
-				perror (NULL);
-				exit (EXIT_FAILURE);
-			}
-			if(current.direction == LEFT_SCAN){
-				statefunc = exit_program;
-			}else if(current.direction == RIGHT_SCAN){
-				statefunc = guard_LU;
-			}
-
-			return statefunc;
+	if(current.state != GUARD_RL){
+		statefunc = guard_RL;
+	}else{
+		res.responseCode = 10;
+		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+			fprintf (stderr, "Error during MsgSend\n");
+			perror (NULL);
+			exit (EXIT_FAILURE);
+		}
+		if(current.direction == LEFT_SCAN){
+			statefunc = exit_program;
+		}else if(current.direction == RIGHT_SCAN){
+			statefunc = guard_LU;
+		}
+	}
+	return statefunc;
 }
 /**********************************************************************
  *
  * 				10	void weight(void)
  *********************************************************************/
 void *weight(){
-	res.responseCode = 11;
-	res.current.weight = current.weight;
-	if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
-		fprintf (stderr, "Error during MsgSend\n");
-		perror (NULL);
-		exit (EXIT_FAILURE);
-	}
-	if(current.direction == LEFT_SCAN){
-		statefunc = left_close;
-	}else if(current.direction == RIGHT_SCAN){
-		statefunc = right_close;
+	if(current.state != WEIGHT){
+		statefunc = weight;
+	}else{
+		res.responseCode = 11;
+		res.current.weight = current.weight;
+		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
+			fprintf (stderr, "Error during MsgSend\n");
+			perror (NULL);
+			exit (EXIT_FAILURE);
+		}
+		if(current.direction == LEFT_SCAN){
+			statefunc = left_close;
+		}else if(current.direction == RIGHT_SCAN){
+			statefunc = right_close;
+		}
 	}
 	return statefunc;
 }
