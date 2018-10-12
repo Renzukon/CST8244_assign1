@@ -11,18 +11,18 @@
 
 //function prototypes
 
-void left_scan(void);
-void right_scan(void);
-void left_open(void);
-void right_open(void);
-void left_close(void);
-void right_close(void);
-void guard_LU(void);
-void guard_LL(void);
-void guard_RU(void);
-void guard_RL(void);
-void weight(void);
-void exit_program(void);
+void *left_scan();
+void *right_scan();
+void *left_open();
+void *right_open();
+void *left_close();
+void *right_close();
+void *guard_LU();
+void *guard_LL();
+void *guard_RU();
+void *guard_RL();
+void *weight();
+void *exit_program();
 
 currentState current;
 int  coid;
@@ -32,7 +32,6 @@ int main(int argc, char* argv[]) {
 	pid_t serverpid = atoi(argv[1]);
 	int  rcvid;
 	int  chid;
-
 
 
 
@@ -51,7 +50,7 @@ int main(int argc, char* argv[]) {
 	}
     while (1) {
     	rcvid = MsgReceive (chid, &current, sizeof (current), NULL);
-    	switch(current.choice){
+    	/*switch(current.choice){
     		case 0:
     			left_scan();
     			break;
@@ -91,6 +90,10 @@ int main(int argc, char* argv[]) {
     			break;
     		default:
     			break;
+    	}*/
+
+    	if(current.choice == 0){
+    		left_scan();
     	}
     	MsgReply (rcvid, EOK, &current, sizeof(current));
     }
@@ -102,7 +105,7 @@ int main(int argc, char* argv[]) {
  *
  * 				0	void left_scan(void) 0,6,2,4,7,8,3,5,9,11
  *********************************************************************/
-void left_scan(void){
+void *left_scan(){
 	current.state=LEFT_SCAN;
 	strcpy(res.response,"Left Scan");
 	if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -110,13 +113,19 @@ void left_scan(void){
 		perror (NULL);
 		exit (EXIT_FAILURE);
 	}
+	printf("CHOICE: %d\n", current.choice);
+	while(current.choice != GUARD_LU){
+		return guard_LU();
+	}
+
+	return 0;
 
 }
 /**********************************************************************
  *
  * 				1	void right_scan(void) 1,8,3,5,9,6,2,4,7,11
  *********************************************************************/
-void right_scan(void){
+void *right_scan(){
 	current.state=RIGHT_SCAN;
 		strcpy(res.response,"Right Scan");
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -129,7 +138,7 @@ void right_scan(void){
  *
  * 				2	void left_open(void)
  *********************************************************************/
-void left_open(void){
+void *left_open(){
 	current.state=LEFT_OPEN;
 	strcpy(res.response,"Left door open");
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -142,7 +151,7 @@ void left_open(void){
  *
  * 				3	void right_open(void)
  *********************************************************************/
-void right_open(void){
+void *right_open(){
 	current.state=RIGHT_OPEN;
 		strcpy(res.response,"right door open");
 			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -155,7 +164,7 @@ void right_open(void){
  *
  * 				4	void left_close(void)
  *********************************************************************/
-void left_close(void){
+void *left_close(){
 	current.state=LEFT_CLOSE;
 			strcpy(res.response,"left door close");
 				if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -168,7 +177,7 @@ void left_close(void){
  *
  * 				5	void right_close(void)
  *********************************************************************/
-void right_close(void){
+void *right_close(){
 	current.state=RIGHT_CLOSE;
 				strcpy(res.response,"right door close");
 					if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -181,7 +190,7 @@ void right_close(void){
  *
  * 				6	void guard_LU(void)
  *********************************************************************/
-void guard_LU(void){
+void *guard_LU(){
 
 	current.state=GUARD_LU;
 		strcpy(res.response,"Guard Left unlock");
@@ -195,7 +204,7 @@ void guard_LU(void){
  *
  * 				7	void guard_LL(void)
  *********************************************************************/
-void guard_LL(void){
+void *guard_LL(){
 	current.state=GUARD_LL;
 			strcpy(res.response,"Guard Left lock");
 			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -208,7 +217,7 @@ void guard_LL(void){
  *
  * 				8	void guard_RU(void)
  *********************************************************************/
-void guard_RU(void){
+void *guard_RU(){
 	current.state=GUARD_RU;
 			strcpy(res.response,"Guard right unlock");
 			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -221,7 +230,7 @@ void guard_RU(void){
  *
  * 				9	void guard_RL(void)
  *********************************************************************/
-void guard_RL(void){
+void *guard_RL(){
 	current.state=GUARD_RL;
 			strcpy(res.response,"Guard right lock");
 			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -234,7 +243,7 @@ void guard_RL(void){
  *
  * 				10	void weight(void)
  *********************************************************************/
-void weight(void){
+void *weight(){
 	current.state=WEIGHT;
 	strcpy(res.response,"WEIGHING...");
 	if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -248,7 +257,7 @@ void weight(void){
  *
  * 				11   void exit(void)
  *********************************************************************/
-void exit_program(void){
+void *exit_program(){
 	current.state = EXIT;
 	strcpy(res.response,"EXITING...");
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {

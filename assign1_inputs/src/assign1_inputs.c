@@ -34,26 +34,26 @@ int main(int argc, char* argv[]) {
 		}else if(strcmp(choice,"rs") == 0){
 			current.choice = 1;
 		}else if(strcmp(choice,"ws") == 0){
-			current.choice = 2;
+			current.choice = 10;
 			printf("Please enter your weight\n");
 			scanf("%d",&weight);
 			current.weight = weight;
 		}else if(strcmp(choice,"lo") == 0){
-			current.choice = 3;
-		}else if(strcmp(choice,"ll") == 0){
+			current.choice = 2;
+		}else if(strcmp(choice,"lc") == 0){
 			current.choice = 4;
 		}else if(strcmp(choice,"ro") == 0){
+			current.choice = 3;
+		}else if(strcmp(choice,"rc") == 0){
 			current.choice = 5;
-		}else if(strcmp(choice,"rl") == 0){
-			current.choice = 6;
 		}else if(strcmp(choice,"gll") == 0){
 			current.choice = 7;
 		}else if(strcmp(choice,"glu") == 0){
-			current.choice = 8;
+			current.choice = 6;
 		}else if(strcmp(choice,"grl") == 0){
 			current.choice = 9;
 		}else if(strcmp(choice,"gru") == 0){
-			current.choice = 10;
+			current.choice = 8;
 		}else if(strcmp(choice,"exit") == 0){
 			current.choice = 11;
 		}
