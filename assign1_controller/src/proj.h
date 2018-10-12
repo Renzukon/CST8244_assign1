@@ -39,8 +39,8 @@ const char *inMessage[NUM_INPUTS] = {
 
 const char *outMessage[NUM_OUTPUTS] = {
 	"",
-	"Left Scan",
-	"Right Scan",
+	"Person scanned ID, ID = ",
+	"Person scanned ID, ID =",
 	"Left Open",
 	"Right Open",
 	"Left Close",
@@ -49,7 +49,7 @@ const char *outMessage[NUM_OUTPUTS] = {
 	"Guard Left Lock",
 	"Guard Right Unlock",
 	"Guard Right Lock",
-	"Weighing ",
+	"Weighing....Person's weight is",
 	"Exiting"
 };
 

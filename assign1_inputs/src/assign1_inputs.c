@@ -13,13 +13,8 @@ int main(int argc, char* argv[]) {
 	pid_t serverpid = atoi(argv[1]);
 	char state[5];
 	currentState current;
-	response response;
 	int personid = 0;
 	int weight = 0;
-
-
-
-
 
 	while(current.state != EXIT){
 		printf("Enter the event type\n");
