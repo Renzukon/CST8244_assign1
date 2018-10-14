@@ -51,7 +51,7 @@ const char *outMessage[NUM_OUTPUTS] = {
 	"Guard Right Unlock",
 	"Guard Right Lock",
 	"Weighing....Person's weight is",
-	"Exiting"
+	"Exiting Controller"
 };
 
 struct currentState {
