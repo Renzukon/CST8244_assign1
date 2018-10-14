@@ -9,6 +9,7 @@
 #include "proj.h"
 
 int main(int argc, char* argv[]) {
+	if(argc >= 2){
 	int  coid;
 	pid_t serverpid = atoi(argv[1]);
 	char state[5];
@@ -72,5 +73,9 @@ int main(int argc, char* argv[]) {
    		}
 	}
 	ConnectDetach(coid);
+	return EXIT_SUCCESS;
+	}else{
+		printf("Not enough arguments supplied.");
+	}
 	return EXIT_SUCCESS;
 }

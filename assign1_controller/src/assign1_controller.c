@@ -31,36 +31,38 @@ int  coid;
 response res;
 
 int main(int argc, char* argv[]) {
+	if(argc >= 2){
+		pid_t serverpid = atoi(argv[1]);
+		int  rcvid;
+		int  chid;
+		chid = ChannelCreate (0);
+		if (chid == -1)
+		{
+			perror("failed to create the channel.");
+			exit (EXIT_FAILURE);
+		}
+		printf("The controller is running as process_id %d\n", getpid());
+		coid = ConnectAttach (ND_LOCAL_NODE, serverpid, 1, _NTO_SIDE_CHANNEL, 0);
+		if (coid == -1) {
+			fprintf (stderr, "Couldn't ConnectAttach\n");
+			perror (NULL);
+			exit(EXIT_FAILURE);
+		}
+		while (1) {
+			rcvid = MsgReceive (chid, &current, sizeof (current), NULL);
+			statefunc = (StateFunc)(*statefunc)();
 
-	pid_t serverpid = atoi(argv[1]);
-	int  rcvid;
-	int  chid;
-
-    chid = ChannelCreate (0);
-    if (chid == -1)
-    {
-    	perror("failed to create the channel.");
-    	exit (EXIT_FAILURE);
-    }
-	printf("The controller is running as process_id %d\n", getpid());
-	coid = ConnectAttach (ND_LOCAL_NODE, serverpid, 1, _NTO_SIDE_CHANNEL, 0);
-	if (coid == -1) {
-		fprintf (stderr, "Couldn't ConnectAttach\n");
-		perror (NULL);
-		exit(EXIT_FAILURE);
-	}
-    while (1) {
-    	rcvid = MsgReceive (chid, &current, sizeof (current), NULL);
-    	statefunc = (StateFunc)(*statefunc)();
-
-    	MsgReply (rcvid, EOK, &current, sizeof(current));
-    	if(statefunc == exit_program){
-	   	    ChannelDestroy(chid);
-	   		exit(1);
-    	}
-    }
-
+			MsgReply (rcvid, EOK, &current, sizeof(current));
+			if(statefunc == exit_program){
+				ChannelDestroy(chid);
+				exit(1);
+			}
+		}
     ChannelDestroy(chid);
+	return EXIT_SUCCESS;
+	}else{
+		printf("Not enough arguments supplied.");
+	}
 	return EXIT_SUCCESS;
 }
 
