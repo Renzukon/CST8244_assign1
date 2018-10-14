@@ -31,38 +31,36 @@ int  coid;
 response res;
 
 int main(int argc, char* argv[]) {
-	if(argc >= 2){
-		pid_t serverpid = atoi(argv[1]);
-		int  rcvid;
-		int  chid;
-		chid = ChannelCreate (0);
-		if (chid == -1)
-		{
-			perror("failed to create the channel.");
-			exit (EXIT_FAILURE);
-		}
-		printf("The controller is running as process_id %d\n", getpid());
-		coid = ConnectAttach (ND_LOCAL_NODE, serverpid, 1, _NTO_SIDE_CHANNEL, 0);
-		if (coid == -1) {
-			fprintf (stderr, "Couldn't ConnectAttach\n");
-			perror (NULL);
-			exit(EXIT_FAILURE);
-		}
-		while (1) {
-			rcvid = MsgReceive (chid, &current, sizeof (current), NULL);
-			statefunc = (StateFunc)(*statefunc)();
 
-			MsgReply (rcvid, EOK, &current, sizeof(current));
-			if(statefunc == exit_program){
-				ChannelDestroy(chid);
-				exit(1);
-			}
-		}
-    ChannelDestroy(chid);
-	return EXIT_SUCCESS;
-	}else{
-		printf("Not enough arguments supplied.");
+	pid_t serverpid = atoi(argv[1]);
+	int  rcvid;
+	int  chid;
+
+    chid = ChannelCreate (0);
+    if (chid == -1)
+    {
+    	perror("failed to create the channel.");
+    	exit (EXIT_FAILURE);
+    }
+	printf("The controller is running as process_id %d\n", getpid());
+	coid = ConnectAttach (ND_LOCAL_NODE, serverpid, 1, _NTO_SIDE_CHANNEL, 0);
+	if (coid == -1) {
+		fprintf (stderr, "Couldn't ConnectAttach\n");
+		perror (NULL);
+		exit(EXIT_FAILURE);
 	}
+    while (1) {
+    	rcvid = MsgReceive (chid, &current, sizeof (current), NULL);
+    	statefunc = (StateFunc)(*statefunc)();
+
+    	MsgReply (rcvid, EOK, &current, sizeof(current));
+    	if(statefunc == exit_program){
+	   	    ChannelDestroy(chid);
+	   		exit(1);
+    	}
+    }
+
+    ChannelDestroy(chid);
 	return EXIT_SUCCESS;
 }
 
@@ -87,10 +85,10 @@ void *initial_state(){
  * 				0	void left_scan(void) 0,6,2,4,7,8,3,5,9,11
  *********************************************************************/
 void *left_scan(){
-	if(current.state != LEFT_SCAN){
-		statefunc = left_scan;
-	}else if(current.state == EXIT){
+	if(current.state == EXIT){
 		statefunc = exit_program;
+	}else if(current.state != LEFT_SCAN){
+		statefunc = left_scan;
 	}else{
 		res.responseCode = 1;
 		res.current.personId = current.personId;
@@ -108,10 +106,10 @@ void *left_scan(){
  * 				2	void right_scan(void)
  *********************************************************************/
 void *right_scan(){
-	if(current.state != RIGHT_SCAN){
-		statefunc = right_scan;
-	}else if(current.state == EXIT){
+	if(current.state == EXIT){
 		statefunc = exit_program;
+	}else if(current.state != RIGHT_SCAN){
+		statefunc = right_scan;
 	}else{
 		res.responseCode = 2;
 		res.current.personId = current.personId;
@@ -129,10 +127,10 @@ void *right_scan(){
  * 				3	void left_open(void)
  *********************************************************************/
 void *left_open(){
-	if(current.state != LEFT_OPEN){
-		statefunc = left_open;
-	}else if(current.state == EXIT){
+	if(current.state == EXIT){
 		statefunc = exit_program;
+	}else if(current.state != LEFT_OPEN){
+		statefunc = left_open;
 	}else{
 	res.responseCode = 3;
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -153,10 +151,10 @@ void *left_open(){
  * 				3	void right_open(void)
  *********************************************************************/
 void *right_open(){
-	if(current.state != RIGHT_OPEN){
-		statefunc = right_open;
-	}else if(current.state == EXIT){
+	if(current.state == EXIT){
 		statefunc = exit_program;
+	}else if(current.state != RIGHT_OPEN){
+		statefunc = right_open;
 	}else{
 	res.responseCode = 4;
 			if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -177,10 +175,10 @@ void *right_open(){
  * 				4	void left_close(void)
  *********************************************************************/
 void *left_close(){
-	if(current.state != LEFT_CLOSE){
-		statefunc = left_close;
-	}else if(current.state == EXIT){
+	if(current.state == EXIT){
 		statefunc = exit_program;
+	}else if(current.state != LEFT_CLOSE){
+		statefunc = left_close;
 	}else{
 		res.responseCode = 5;
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -197,10 +195,10 @@ void *left_close(){
  * 				5	void right_close(void)
  *********************************************************************/
 void *right_close(){
-	if(current.state != RIGHT_CLOSE){
-		statefunc = right_close;
-	}else if(current.state == EXIT){
+	if(current.state == EXIT){
 		statefunc = exit_program;
+	}else if(current.state != RIGHT_CLOSE){
+		statefunc = right_close;
 	}else{
 		res.responseCode = 6;
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -217,10 +215,10 @@ void *right_close(){
  * 				6	void guard_LU(void)
  *********************************************************************/
 void *guard_LU(){
-	if(current.state != GUARD_LU){
-		statefunc = guard_LU;
-	}else if(current.state == EXIT){
+	if(current.state == EXIT){
 		statefunc = exit_program;
+	}else if(current.state != GUARD_LU){
+		statefunc = guard_LU;
 	}else{
 		res.responseCode = 7;
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -237,10 +235,10 @@ void *guard_LU(){
  * 				7	void guard_LL(void)
  *********************************************************************/
 void *guard_LL(){
-	if(current.state != GUARD_LL){
-		statefunc = guard_LL;
-	}else if(current.state == EXIT){
+	if(current.state == EXIT){
 		statefunc = exit_program;
+	}else if(current.state != GUARD_LL){
+		statefunc = guard_LL;
 	}else{
 		res.responseCode = 8;
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -261,10 +259,10 @@ void *guard_LL(){
  * 				8	void guard_RU(void)
  *********************************************************************/
 void *guard_RU(){
-	if(current.state != GUARD_RU){
-		statefunc = guard_RU;
-	}else if(current.state == EXIT){
+	if(current.state == EXIT){
 		statefunc = exit_program;
+	}else if(current.state != GUARD_RU){
+		statefunc = guard_RU;
 	}else{
 		res.responseCode = 9;
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -281,10 +279,10 @@ void *guard_RU(){
  * 				9	void guard_RL(void)
  *********************************************************************/
 void *guard_RL(){
-	if(current.state != GUARD_RL){
-		statefunc = guard_RL;
-	}else if(current.state == EXIT){
+	if(current.state == EXIT){
 		statefunc = exit_program;
+	}else if(current.state != GUARD_RL){
+		statefunc = guard_RL;
 	}else{
 		res.responseCode = 10;
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
@@ -305,10 +303,10 @@ void *guard_RL(){
  * 				10	void weight(void)
  *********************************************************************/
 void *weight(){
-	if(current.state != WEIGHT){
-		statefunc = weight;
-	}else if(current.state == EXIT){
+	if(current.state == EXIT){
 		statefunc = exit_program;
+	}else if(current.state != WEIGHT){
+		statefunc = weight;
 	}else{
 		res.responseCode = 11;
 		res.current.weight = current.weight;

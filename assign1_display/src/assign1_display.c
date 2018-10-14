@@ -37,13 +37,6 @@ int main(int argc, char* argv[]) {
 	   			printf("%s\n",outMessage[res.responseCode]);
 	   			break;
 	   	}
-//	   	if(res.responseCode == 1 || res.responseCode == 2){
-//		   	printf("%s %d\n",outMessage[res.responseCode],res.current.personId);
-//	   	}else if(res.responseCode == 11){
-//	   		printf("%s %d\n",outMessage[res.responseCode],res.current.weight);
-//	   	}else{
-//		   	printf("%s\n",outMessage[res.responseCode]);
-//	   	}
 	   	MsgReply (rcvid, EOK, &res, sizeof(res));
 	   	if(res.responseCode == 12){
 	   		printf("Exiting Display\n");
