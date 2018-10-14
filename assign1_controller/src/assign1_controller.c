@@ -87,6 +87,7 @@ void *initial_state(){
 void *left_scan(){
 	if(current.state == EXIT){
 		statefunc = exit_program;
+		statefunc = (StateFunc)(*statefunc)();
 	}else if(current.state != LEFT_SCAN){
 		statefunc = left_scan;
 	}else{
@@ -108,6 +109,7 @@ void *left_scan(){
 void *right_scan(){
 	if(current.state == EXIT){
 		statefunc = exit_program;
+		statefunc = (StateFunc)(*statefunc)();
 	}else if(current.state != RIGHT_SCAN){
 		statefunc = right_scan;
 	}else{
@@ -129,6 +131,7 @@ void *right_scan(){
 void *left_open(){
 	if(current.state == EXIT){
 		statefunc = exit_program;
+		statefunc = (StateFunc)(*statefunc)();
 	}else if(current.state != LEFT_OPEN){
 		statefunc = left_open;
 	}else{
@@ -153,6 +156,7 @@ void *left_open(){
 void *right_open(){
 	if(current.state == EXIT){
 		statefunc = exit_program;
+		statefunc = (StateFunc)(*statefunc)();
 	}else if(current.state != RIGHT_OPEN){
 		statefunc = right_open;
 	}else{
@@ -177,6 +181,7 @@ void *right_open(){
 void *left_close(){
 	if(current.state == EXIT){
 		statefunc = exit_program;
+		statefunc = (StateFunc)(*statefunc)();
 	}else if(current.state != LEFT_CLOSE){
 		statefunc = left_close;
 	}else{
@@ -197,6 +202,7 @@ void *left_close(){
 void *right_close(){
 	if(current.state == EXIT){
 		statefunc = exit_program;
+		statefunc = (StateFunc)(*statefunc)();
 	}else if(current.state != RIGHT_CLOSE){
 		statefunc = right_close;
 	}else{
@@ -217,6 +223,7 @@ void *right_close(){
 void *guard_LU(){
 	if(current.state == EXIT){
 		statefunc = exit_program;
+		statefunc = (StateFunc)(*statefunc)();
 	}else if(current.state != GUARD_LU){
 		statefunc = guard_LU;
 	}else{
@@ -237,6 +244,7 @@ void *guard_LU(){
 void *guard_LL(){
 	if(current.state == EXIT){
 		statefunc = exit_program;
+		statefunc = (StateFunc)(*statefunc)();
 	}else if(current.state != GUARD_LL){
 		statefunc = guard_LL;
 	}else{
@@ -261,6 +269,7 @@ void *guard_LL(){
 void *guard_RU(){
 	if(current.state == EXIT){
 		statefunc = exit_program;
+		statefunc = (StateFunc)(*statefunc)();
 	}else if(current.state != GUARD_RU){
 		statefunc = guard_RU;
 	}else{
@@ -281,6 +290,7 @@ void *guard_RU(){
 void *guard_RL(){
 	if(current.state == EXIT){
 		statefunc = exit_program;
+		statefunc = (StateFunc)(*statefunc)();
 	}else if(current.state != GUARD_RL){
 		statefunc = guard_RL;
 	}else{
@@ -305,6 +315,7 @@ void *guard_RL(){
 void *weight(){
 	if(current.state == EXIT){
 		statefunc = exit_program;
+		statefunc = (StateFunc)(*statefunc)();
 	}else if(current.state != WEIGHT){
 		statefunc = weight;
 	}else{
@@ -334,6 +345,5 @@ void *exit_program(){
 			perror (NULL);
 			exit (EXIT_FAILURE);
 		}
-		//exit(1);
 		return exit_program;
 }
