@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
     	statefunc = (StateFunc)(*statefunc)();
 
     	MsgReply (rcvid, EOK, &current, sizeof(current));
-    	if(statefunc == exit_program){
+    	if(current.state == EXIT){
 	   	    ChannelDestroy(chid);
 	   		exit(1);
     	}
@@ -339,11 +339,16 @@ void *weight(){
  * 				11   void exit(void)
  *********************************************************************/
 void *exit_program(){
-	res.responseCode = 12;
+	if(current.state != EXIT){
+			statefunc = exit_program;
+	}else{
+		res.responseCode = 12;
 		if (MsgSend (coid, &res, sizeof(res), &res, sizeof (res)) == -1) {
 			fprintf (stderr, "Error during MsgSend\n");
 			perror (NULL);
 			exit (EXIT_FAILURE);
 		}
-		return exit_program;
+		statefunc = exit_program;
+	}
+	return statefunc;
 }
