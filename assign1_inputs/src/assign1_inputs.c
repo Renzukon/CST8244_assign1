@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Title: assign1_controller.c
+ * Title: assign1_inputs.c
  *
  * Authors: Peter Nguyen and Jordan Hoskins
  * Date: 2018-10-16
