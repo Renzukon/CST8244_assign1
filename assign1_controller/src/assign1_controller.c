@@ -7,7 +7,7 @@
  * Purpose: The controller will turn the state machine for assignment1.
  * 			inputs are input by the user to determine the current state and next state.
  * 			All states will loop until the correct state in the FSM has been input by
- * 			the user.
+ * 			the user, or exit.
  *****************************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>

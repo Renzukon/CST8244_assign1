@@ -4,10 +4,11 @@
  * Authors: Peter Nguyen and Jordan Hoskins
  * Date: 2018-10-16
  *
- * Purpose: The controller will turn the state machine for assignment1.
- * 			inputs are input by the user to determine the current state and next state.
- * 			All states will loop until the correct state in the FSM has been input by
- * 			the user.
+ * Purpose: assign1_display is responsible solely for all output messages. Receives a struct with
+ * 			an int variable as well as another structure for values to be displayed. The int value
+ * 			determines which message will be output, and depending on certain cases, additional
+ * 			information is displayed as well.
+ *
  *****************************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>

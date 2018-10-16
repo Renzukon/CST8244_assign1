@@ -4,10 +4,10 @@
  * Authors: Peter Nguyen and Jordan Hoskins
  * Date: 2018-10-16
  *
- * Purpose: The controller will turn the state machine for assignment1.
- * 			inputs are input by the user to determine the current state and next state.
- * 			All states will loop until the correct state in the FSM has been input by
- * 			the user.
+ * Purpose: assign1_inputs handles all cases of inputs from the user, or a text file. Prompts user to enter
+ * 			enter an event type. Depending on the event type, it will prompt for additional information.
+ * 			Afterwards, a struct with all the values that was prompted is sent off to the controller.
+ *
  *****************************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
