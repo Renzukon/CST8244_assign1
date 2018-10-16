@@ -257,7 +257,7 @@ void *guard_LL(){
 		if(current.direction == LEFT_SCAN){
 			statefunc = guard_RU;
 		}else if(current.direction == RIGHT_SCAN){
-			statefunc = exit_program;
+			statefunc = initial_state;
 		}
 	}
 	return statefunc;
@@ -301,7 +301,7 @@ void *guard_RL(){
 			exit (EXIT_FAILURE);
 		}
 		if(current.direction == LEFT_SCAN){
-			statefunc = exit_program;
+			statefunc = initial_state;
 		}else if(current.direction == RIGHT_SCAN){
 			statefunc = guard_LU;
 		}
