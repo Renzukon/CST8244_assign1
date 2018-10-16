@@ -1,3 +1,14 @@
+/****************************************************************************************
+ * Title: assign1_controller.c
+ *
+ * Authors: Peter Nguyen and Jordan Hoskins
+ * Date: 2018-10-16
+ *
+ * Purpose: The controller will turn the state machine for assignment1.
+ * 			inputs are input by the user to determine the current state and next state.
+ * 			All states will loop until the correct state in the FSM has been input by
+ * 			the user.
+ *****************************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <process.h>
@@ -6,7 +17,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
-
 #include "proj.h"
 
 int main(int argc, char* argv[]) {
